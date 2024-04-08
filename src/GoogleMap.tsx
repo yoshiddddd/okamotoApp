@@ -12,7 +12,21 @@ const center = {
   lat: 35.6995,
   lng: 139.6363
 };
-
+const mapOptions = {
+    styles: [
+      {
+        featureType: "all",
+        elementType: "labels",
+        stylers: [{ visibility: "off" }]
+      },
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ visibility: "simplified" }]
+      },
+      // 他のスタイル設定...
+    ]
+  };
 const MyGoogleMap = () => {
   return (
     <>
@@ -22,6 +36,7 @@ const MyGoogleMap = () => {
         mapContainerStyle={containerStyle}
         center={center}
         zoom={15}
+        options={mapOptions}
       >
         {/* ここにマップ上に配置する他の要素を追加できる */}
       </GoogleMap>
