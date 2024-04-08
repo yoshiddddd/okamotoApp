@@ -1,36 +1,33 @@
-import { GoogleMap as GoogleMapComponent } from "@react-google-maps/api";
-import React, { FC } from "react";
-import { useMap } from "./useMap";
 
-type Props = {
-  defaultPosition: {
-    lat: number;
-    lng: number;
-  };
+
+import React from 'react';
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
+
+const containerStyle = {
+    width: '90%',
+    height: '600px'
 };
 
-const GoogleMap: FC<Props> = (props) => {
-  const { isLoaded, onLoad } = useMap({
-    defaultPosition: props.defaultPosition,
-  });
+const center = {
+  lat: 35.6995,
+  lng: 139.6363
+};
 
-  const containerStyle = {
-    width: "100vw",
-    height: "75vh",
-  };
-
+const MyGoogleMap = () => {
   return (
     <>
-      {isLoaded ? (
-        <GoogleMapComponent
-          mapContainerStyle={containerStyle}
-          onLoad={onLoad}
-        ></GoogleMapComponent>
-      ) : (
-        "loading"
-      )}
+    <LoadScript
+        googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY!}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={15}
+      >
+        {/* ここにマップ上に配置する他の要素を追加できる */}
+      </GoogleMap>
+    </LoadScript>
     </>
   );
-};
+}
 
-export default React.memo(GoogleMap);
+export default MyGoogleMap;
