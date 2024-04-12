@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, LoadScript,MarkerF } from '@react-google-maps/api';
 
 const containerStyle = {
     width: '90%',
@@ -12,6 +12,10 @@ const center = {
   lat: 35.6995,
   lng: 139.6363
 };
+const position = {
+    lat:  35.6995,
+    lng: 139.644
+  };
 const mapOptions = {
     styles: [
       {
@@ -38,6 +42,11 @@ const MyGoogleMap = () => {
         zoom={15}
         options={mapOptions}
       >
+        <MarkerF 
+        position={position}
+        onClick={() => alert('Marker Clicked!')}
+        />
+
         {/* ここにマップ上に配置する他の要素を追加できる */}
       </GoogleMap>
     </LoadScript>
