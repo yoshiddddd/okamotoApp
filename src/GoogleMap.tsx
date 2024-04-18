@@ -39,17 +39,24 @@ const mapOptions = {
     const data = await response.json();
     return data.results[0].geometry.location;
   }
-  
+  const addresses = [
+    "東京都新宿区西新宿2-8-1",
+    "東京都千代田区千代田1-1",
+    "東京都港区芝公園4-2-8"
+  ];
 const MyGoogleMap = () => {
-    const [position, setPosition] = useState<google.maps.LatLngLiteral | null>(null);
+    const [positions, setPositions] = useState<google.maps.LatLngLiteral[]>([]);
+
     useEffect(() => {
-        async function fetchCoordinates() {
-          const coords = await getLatLng("東京都杉並区善福寺1-9-34");
-          setPosition(coords);
-        }
-    
-        fetchCoordinates();
-      }, []);
+      async function fetchCoordinates() {
+        const newPositions = await Promise.all(addresses.map(async address => {
+          return await getLatLng(address);
+        }));
+        setPositions(newPositions);
+      }
+  
+      fetchCoordinates();
+    }, []);
   return (
     <>
     <LoadScript
@@ -60,7 +67,9 @@ const MyGoogleMap = () => {
         zoom={15}
         options={mapOptions}
       >
-       {position && <MarkerF position={position} onClick={() => alert('Marker Clicked!')} />}
+      {positions.map((position, index) => (
+          <MarkerF key={index} position={position} />
+        ))}
  
         {/* ここにマップ上に配置する他の要素を追加できる */}
       </GoogleMap>
