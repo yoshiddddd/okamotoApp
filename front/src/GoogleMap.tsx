@@ -39,24 +39,40 @@ const mapOptions = {
     const data = await response.json();
     return data.results[0].geometry.location;
   }
-  const addresses = [
-    "東京都新宿区西新宿2-8-1",
-    "東京都千代田区千代田1-1",
-    "東京都港区芝公園4-2-8"
+  const detailedAddresses = [
+    {
+      address: "東京都新宿区西新宿2-8-1",
+      name: "イタリアン",
+      price: 10000
+    },
+    {
+      address: "東京都千代田区千代田1-1",
+      name: "居酒屋",
+      price: 1000
+    },
+    {
+      address: "東京都港区芝公園4-2-8",
+      name: "中華",
+      price: 1000
+    }
   ];
+
+
 const MyGoogleMap = () => {
     const [positions, setPositions] = useState<google.maps.LatLngLiteral[]>([]);
 
     useEffect(() => {
-      async function fetchCoordinates() {
-        const newPositions = await Promise.all(addresses.map(async address => {
-          return await getLatLng(address);
-        }));
-        setPositions(newPositions);
-      }
-  
-      fetchCoordinates();
-    }, []);
+        async function fetchCoordinates() {
+        //promise.allによって全てのpromise配列が格納し終わるまで待たれる
+          const newPositions = await Promise.all(detailedAddresses.map(async (item) => {
+            const coords = await getLatLng(item.address);
+            return coords;
+          }));
+          setPositions(newPositions);
+        }
+    
+        fetchCoordinates();
+      }, []);
   return (
     <>
     <LoadScript
