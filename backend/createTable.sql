@@ -1,6 +1,6 @@
 CREATE TABLE store (
-    store_id INT PRIMARY KEY,
-    store_name VARCHAR(255),
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
     address TEXT,
     phone_number VARCHAR(20),
     created_at TIMESTAMP,
