@@ -2,7 +2,7 @@
 
 // import React from 'react';
 import { useState ,useEffect} from 'react';
-import { GoogleMap, InfoWindowF, LoadScript,MarkerF } from '@react-google-maps/api';
+import { GoogleMap, InfoWindow, LoadScript,MarkerF } from '@react-google-maps/api';
 import { Skeleton } from '@chakra-ui/react';
 
 const containerStyle = {
@@ -118,7 +118,7 @@ const MyGoogleMap = () => {
         ))
         }
         {selectPosition && selectPosition.lat && selectPosition.lng&&(
-            <InfoWindowF
+            <InfoWindow
                 position={{lat: selectPosition.lat,lng: selectPosition.lng}}
                 onCloseClick={()=> SetSelectPosition(null)}
 
@@ -129,7 +129,7 @@ const MyGoogleMap = () => {
                     <br/>
                     {selectPosition.price}円
                 </div>
-            </InfoWindowF>
+            </InfoWindow>
         )}
         {/* ここにマップ上に配置する他の要素を追加できる */}
       </GoogleMap>
