@@ -12,8 +12,8 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 35.6995,
-  lng: 139.6363
+  lat: 35.6905,
+  lng: 139.6995
 };
 // const position = {
 //     lat:  35.6995,
@@ -23,6 +23,7 @@ interface LatLngAddress {
     id: number;
     lat: number;
     lng: number;
+    type: string;
     name: string;
     price: number;
   }
@@ -50,20 +51,37 @@ const mapOptions = {
     {
       id: 1,
       address: "東京都新宿区西新宿2-8-1",
+      type:"yellow",
       name: "イタリアン",
       price: 10000
     },
     {
       id: 2,
-      address: "東京都千代田区千代田1-1",
+      address: "東京都新宿区西新宿2-8-2",
+      type: "red",
       name: "居酒屋",
       price: 100
     },
     {
       id: 3,
-      address: "東京都港区芝公園4-2-8",
+      address: "東東京都新宿区西新宿2-9-3",
+      type: "bulue",
       name: "中華",
       price: 1000
+    },
+    {
+        id: 4,
+        address: "東京都新宿区西新宿2-10-1",
+        type: "green",
+        name: "吉田",
+        price: 1000
+    },
+    {
+        id: 5,
+        address: "東京都新宿区西新宿2-11-1",
+        type: "red",
+        name: "okamoto",
+        price: 1000
     }
   ];
   interface Position {
@@ -86,6 +104,7 @@ const MyGoogleMap = () => {
               id: item.id,
               lat: latLng.lat,
               lng: latLng.lng,
+              type: item.type,
               name: item.name,
               price: item.price
             };
@@ -102,6 +121,20 @@ const MyGoogleMap = () => {
           await SetSelectPosition(position);
           console.log(selectPosition);
       }
+      const genreToColor: Record<string, string> = {
+        red: '#FF0000', // 赤
+        green: '#008000', // 緑
+        yellow: '#FFFF00', // 黄色
+        blue: '#0000FF' // 青
+      };
+// SVGアイコンを生成してURLエンコードする関数
+const createSvgIcon = (color: string): string => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+      <path fill="${color}" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9s-1.12 2.5-2.5 2.5z"/>
+    </svg>`;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+  };
+  
     //   console.log(positions);
   return (
     <>
@@ -110,18 +143,21 @@ const MyGoogleMap = () => {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={15}
+        zoom={16}
         options={mapOptions}
       >
       {positions.map((position, index) => (
-        <MarkerF key={position.id} position={position} onClick={()=> SelectedPosition(position)} />
+        <MarkerF key={position.id}
+         position={position} 
+         onClick={()=> SelectedPosition(position)}
+         icon={{url:createSvgIcon(genreToColor[position.type])}} />
         ))
         }
         {selectPosition && selectPosition.lat && selectPosition.lng&&(
             <InfoWindowF
                 position={{lat: selectPosition.lat,lng: selectPosition.lng}}
                 onCloseClick={()=> SetSelectPosition(null)}
-
+                
             >
                 
                 <div>
