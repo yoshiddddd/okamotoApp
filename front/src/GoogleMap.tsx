@@ -9,7 +9,7 @@ import  SelectedDetail  from './SelectedDetail';
 import "./GoogleMap.css";
 const containerStyle = {
     width: '900px',        // コンテナの幅を設定
-    height: '700px',       // コンテナの高さを設定
+    height: '900px',       // コンテナの高さを設定
     border: '4px solid #C0C0C0', // 枠線を青で設定
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // 影を付ける
     borderRadius: '10px',  // 角の丸みを設定
@@ -18,8 +18,8 @@ const containerStyle = {
 };
 
 const center = {
-    lat: 35.6905,
-    lng: 139.6995
+    lat: 35.6907,
+    lng: 139.695
 };
 interface LatLngAddress {
     id: number;
@@ -112,7 +112,9 @@ export const MyGoogleMap = () => {
       };
     }, []);
 
-
+    const reloadPage = () => {
+        window.location.reload();
+      };
 
 	useEffect(() => {
         const fetchData = async () => {
@@ -183,8 +185,7 @@ export const MyGoogleMap = () => {
   return (
     //各種りんく
     <>
-    <LoadScript
-        googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY!}>
+    
     <Link to="/addmap" className='addpagebutton'> 投稿</Link>
 
     <div className='mapandDetail'>
@@ -229,7 +230,7 @@ export const MyGoogleMap = () => {
             )}
       </GoogleMap>)}
       <div className='detail'>
-      {selectPosition && <SelectedDetail key={selectPosition.id} position={selectPosition} />}
+      {selectPosition && <SelectedDetail key={selectPosition.id} position={selectPosition} onDelete={reloadPage} />}
       </div>
       <div>
         {
@@ -237,7 +238,6 @@ export const MyGoogleMap = () => {
         }
       </div>
     </div>
-    </LoadScript>
     </>
   );
 }
