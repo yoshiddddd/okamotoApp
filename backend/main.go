@@ -1,17 +1,25 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"net/http"
-	"app/handlers"
-	_ "github.com/go-sql-driver/mysql"
-	"log"
+	"okamotoApp/db"
+	"okamotoApp/router"
+	"okamotoApp/usecase"
+	"okamotoApp/controller"
+	"okamotoApp/repository"
 )
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", handlers.HelloWorld).Methods(http.MethodGet)
-	r.HandleFunc("/stores", handlers.GetStores).Methods(http.MethodGet)
-	log.Println("server start at port 8080")
-    log.Fatal(http.ListenAndServe(":8080", r))
+	db := db.NewDB()
+
+	userRepository := repository.NewUserRepository(db)
+	storeRepository := repository.NewStoreRepository(db)
+
+	userUsecase := usecase.NewUserUsecase(userRepository)
+	storeUsecase := usecase.NewStoreUsecase(storeRepository)
+
+	userController := controller.NewUserController(userUsecase)
+	storeController := controller.NewStoreController(storeUsecase)
+
+	e := router.NewRouter(userController, storeController)
+	e.Logger.Fatal(e.Start(":8080"))
 }
