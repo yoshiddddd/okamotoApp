@@ -5,7 +5,8 @@ import { useState ,useEffect,useCallback} from 'react';
 import { GoogleMap, InfoWindowF, LoadScript,MarkerF } from '@react-google-maps/api';
 import { Skeleton } from '@chakra-ui/react';
 import { useNavigate,Link } from 'react-router-dom';  
-
+import  SelectedDetail  from './SelectedDetail';
+import "./GoogleMap.css";
 const containerStyle = {
     width: '900px',        // コンテナの幅を設定
     height: '700px',       // コンテナの高さを設定
@@ -178,7 +179,6 @@ export const MyGoogleMap = () => {
       }, []);
 
       const SelectedPosition = async (position: LatLngAddress)=> {
-          
           await SetSelectPosition(position);
           console.log(selectPosition);
       }
@@ -193,6 +193,7 @@ export const MyGoogleMap = () => {
     <br/>
     <Link to="/deletemap">削除</Link>
 
+    <div className='mapandDetail'>
      {isScriptLoaded&&( <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
@@ -233,11 +234,15 @@ export const MyGoogleMap = () => {
               />
             )}
       </GoogleMap>)}
+      <div className='detail'>
+      {selectPosition && <SelectedDetail position={selectPosition} />}
+      </div>
       <div>
         {
            
         }
       </div>
+    </div>
     </LoadScript>
     </>
   );

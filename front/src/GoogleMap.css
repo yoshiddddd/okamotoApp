@@ -1,0 +1,17 @@
+.mapandDetail {
+    display: flex;         /* Flexbox を使用 */
+    justify-content: center; /* 中央揃え */
+    align-items: start;    /* アイテムを上端揃え */
+    gap: 20px;             /* アイテム間に20pxのスペースを設定 */
+}
+
+.mapandDetail .GoogleMap {
+    flex: 1;               /* フレックスアイテムの拡大縮小に応じて調整 */
+    min-width: 600px;      /* 最小の幅 */
+    height: 400px;         /* 高さ */
+}
+
+.detail {
+    flex: 1;               /* フレックスアイテムの拡大縮小に応じて調整 */
+    min-width: 300px;      /* 最小の幅 */
+}
