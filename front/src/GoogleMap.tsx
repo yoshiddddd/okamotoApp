@@ -1,19 +1,24 @@
 
 
 // import React from 'react';
-import { useState ,useEffect} from 'react';
-import { GoogleMap, InfoWindow, LoadScript,MarkerF } from '@react-google-maps/api';
+import { useState ,useEffect,useCallback} from 'react';
+import { GoogleMap, InfoWindowF, LoadScript,MarkerF } from '@react-google-maps/api';
 import { Skeleton } from '@chakra-ui/react';
+import { useNavigate,Link } from 'react-router-dom';  
 
 const containerStyle = {
-    width: '100%',
-    height: '600px'
+    width: '900px',        // コンテナの幅を設定
+    height: '700px',       // コンテナの高さを設定
+    border: '2px solid #0080ff', // 枠線を青で設定
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // 影を付ける
+    borderRadius: '10px',  // 角の丸みを設定
+    overflow: 'hidden'
     
 };
 
 const center = {
-  lat: 35.6995,
-  lng: 139.6363
+    lat: 35.6905,
+    lng: 139.6995
 };
 // const position = {
 //     lat:  35.6995,
@@ -23,8 +28,9 @@ interface LatLngAddress {
     id: number;
     lat: number;
     lng: number;
-    name: string;
-    price: number;
+    infomation: string;
+    // name: string;
+   
   }
 const mapOptions = {
     styles: [
@@ -74,51 +80,101 @@ const mapOptions = {
     // price: number;
   }
   interface Form{
-	ID: number;
-	Name: string;
+	id: number;
+    address: string;
+	category: string;
+    created_at:string;
 	PhoneNumber: string;
-	Address: string;
-	CreateAt: string;
-	UpdateAt: string
+    information:string;
   }
 
-const MyGoogleMap = () => {
+export const MyGoogleMap = () => {
     const [positions, setPositions] = useState<LatLngAddress[]>([]);
     const [selectPosition , SetSelectPosition] = useState<LatLngAddress | null>(null);
-	// const [form,setForm] = useState<Form[]>([]);
-	// useEffect(() => {
-		// const fetchData = async () => {
-		// 	try {
-		// 		const response = await fetch('http://localhost:8080/stores');
-		// 		if (!response.ok) {
-		// 		  throw new Error('Network response was not ok');
-		// 		}
-		// 		const data = await response.json();
-		// 		setForm(data); // Assuming the data is in the format expected for 'form'
-		// 	  } catch (error) {
-		// 		console.error('There was a problem with the fetch operation:', error);
-		// 	  }
-			  
-		// };
-	// 	fetchData();
-	//   }, []);
-	  useEffect(()=>{
-        const fetchPositions = async () => {
+	const [form,setForm] = useState<Form[]>([]);
+    const navigate = useNavigate();
+    const [currentPosition, setCurrentPosition] = useState<google.maps.LatLngLiteral | null>(null);
+    const [watchId, setWatchId] = useState<number | null>(null);
+    const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
-          const promises = detailedAddresses.map(async (item): Promise<LatLngAddress> => {
-            const latLng = await getLatLng(item.address);
-            return {
-              id: item.id,
-              lat: latLng.lat,
-              lng: latLng.lng,
-              name: item.name,
-              price: item.price
-            };
-          });
-          const newPositions = await Promise.all(promises);
-          setPositions(newPositions);
+    useEffect(() => {
+      let isSubscribed = true;
+  
+      const checkScriptLoaded = () => {
+        const isGoogleMapsScriptLoaded = window.google && window.google.maps;
+        if (isGoogleMapsScriptLoaded && isSubscribed) {
+          setIsScriptLoaded(true);
+        } else {
+          setTimeout(checkScriptLoaded, 200);
+        }
+      };
+  
+      checkScriptLoaded();
+  
+      return () => {
+        isSubscribed = false;
+      };
+    }, []);
+
+
+
+	useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/stores');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setForm(data); // ここでformを更新
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
         };
-        fetchPositions();
+        fetchData();
+    }, []);
+    
+    useEffect(() => {
+        if (form.length > 0) { // formが空ではないことを確認
+            const fetchPositions = async () => {
+                const promises = form.map(async (item) => {
+                    const latLng = await getLatLng(item.address);
+                    console.log(latLng);
+                    return {
+                        id: item.id,
+                        lat: latLng.lat,
+                        lng: latLng.lng,
+                        infomation: item.information
+                    };
+                });
+                const newPositions = await Promise.all(promises);
+                setPositions(newPositions);
+            };
+            fetchPositions();
+        }
+    }, [form]); // formが更新された時にこのuseEffectをトリガー
+    
+    useEffect(() => {
+        const successCallback = (position: GeolocationPosition) => {
+          const currentLatLng: google.maps.LatLngLiteral = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setCurrentPosition(currentLatLng);
+        };
+    
+        const errorCallback = (error: GeolocationPositionError) => {
+          console.error('Error getting current location:', error);
+        };
+    
+        const watchId = navigator.geolocation.watchPosition(successCallback, errorCallback);
+        setWatchId(watchId);
+    
+        return () => {
+          if (watchId !== null) {
+            navigator.geolocation.clearWatch(watchId);
+          }
+        };
       }, []);
 
       const SelectedPosition = async (position: LatLngAddress)=> {
@@ -127,35 +183,61 @@ const MyGoogleMap = () => {
           console.log(selectPosition);
       }
     //   console.log(positions);
+  
   return (
+    //各種りんく
     <>
     <LoadScript
         googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY!}>
-      <GoogleMap
+    <Link to="/addmap"> 投稿</Link>
+    <br/>
+    <Link to="/deletemap">削除</Link>
+
+     {isScriptLoaded&&( <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={15}
+        zoom={16}
         options={mapOptions}
       >
-      {positions.map((position, index) => (
+      {
+      positions.map((position, index) => (
         <MarkerF key={position.id} position={position} onClick={()=> SelectedPosition(position)} />
         ))
         }
         {selectPosition&&(
-            <InfoWindow
+            <InfoWindowF
                 position={{lat: selectPosition.lat,lng: selectPosition.lng}}
                 onCloseClick={()=> SetSelectPosition(null)}
 
             >
                 <div>
-                    {selectPosition.name}
+                    {selectPosition.infomation}
                     <br/>
-                    {selectPosition.price}円
+                    ID: {selectPosition.id}
                 </div>
-            </InfoWindow>
-        )}
-        {/* ここにマップ上に配置する他の要素を追加できる */}
-      </GoogleMap>
+        </InfoWindowF>
+         )} 
+
+{currentPosition && (
+              <MarkerF
+                position={currentPosition}
+                icon={{
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 12,
+                    fillColor: '#4285F4', // 青色の16進数カラーコード
+                    fillOpacity: 1,
+                    strokeColor: '#FFFFFF', // 白色の境界線
+                    strokeWeight: 2,
+                  }}
+                title="現在地"
+              />
+            )}
+      </GoogleMap>)}
+      <div>
+        {
+           
+        }
+      </div>
     </LoadScript>
     </>
   );
