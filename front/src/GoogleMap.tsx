@@ -4,11 +4,14 @@
 import { useState ,useEffect} from 'react';
 import { GoogleMap, InfoWindowF, LoadScript,MarkerF } from '@react-google-maps/api';
 import { Skeleton } from '@chakra-ui/react';
-
+import "./Map.css";
 const containerStyle = {
-    width: '100%',
-    height: '600px'
-    
+    width: '900px',        // コンテナの幅を設定
+    height: '700px',       // コンテナの高さを設定
+    border: '2px solid #0080ff', // 枠線を青で設定
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // 影を付ける
+    borderRadius: '10px',  // 角の丸みを設定
+    overflow: 'hidden' 
 };
 
 const center = {
@@ -21,6 +24,8 @@ const center = {
 //   };
 interface LatLngAddress {
     id: number;
+    address: string;
+    url: string;
     lat: number;
     lng: number;
     type: string;
@@ -50,14 +55,16 @@ const mapOptions = {
   const detailedAddresses = [
     {
       id: 1,
-      address: "東京都新宿区西新宿2-8-1",
+      address: "東京都新宿区西新宿４丁目１４−７ 新宿パークサイド",
+      url:'imge.png',
       type:"yellow",
-      name: "イタリアン",
+      name: "ビストロ&バル ピコレ",
       price: 10000
     },
     {
       id: 2,
       address: "東京都新宿区西新宿2-8-2",
+      url:'/imge.png',
       type: "red",
       name: "居酒屋",
       price: 100
@@ -65,13 +72,15 @@ const mapOptions = {
     {
       id: 3,
       address: "東東京都新宿区西新宿2-9-3",
-      type: "bulue",
+      url:'/imge.png',
+      type: "blue",
       name: "中華",
       price: 1000
     },
     {
         id: 4,
         address: "東京都新宿区西新宿2-10-1",
+        url:'/imge.png',
         type: "green",
         name: "吉田",
         price: 1000
@@ -79,10 +88,28 @@ const mapOptions = {
     {
         id: 5,
         address: "東京都新宿区西新宿2-11-1",
+        url:'/imge.png',
         type: "red",
         name: "okamoto",
         price: 1000
-    }
+    },
+    {
+        id: 6,
+        address: "東京都新宿区西新宿2-1-1",
+        url:'/imge.png',
+        type: "green",
+        name: "hello",
+        price: 1000
+    },
+    {
+        id: 7,
+        address: "東京都新宿区西新宿2-1-2",
+        url:'/imge.png',
+        type: "red",
+        name: "hoge",
+        price: 1000
+    },
+
   ];
   interface Position {
     id: number;
@@ -95,6 +122,7 @@ const mapOptions = {
 
 const MyGoogleMap = () => {
     const [positions, setPositions] = useState<LatLngAddress[]>([]);
+    const [selectedType, setSelectedType] = useState<string | null>(null);
     const [selectPosition , SetSelectPosition] = useState<LatLngAddress | null>(null);
     useEffect(() => {
         const fetchPositions = async () => {
@@ -102,6 +130,8 @@ const MyGoogleMap = () => {
             const latLng = await getLatLng(item.address);
             return {
               id: item.id,
+              address: item.address,
+              url: item.url,
               lat: latLng.lat,
               lng: latLng.lng,
               type: item.type,
@@ -134,19 +164,55 @@ const createSvgIcon = (color: string): string => {
     </svg>`;
     return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
   };
-  
+  const filterMarkers = selectedType ? positions.filter(p => p.type === selectedType) : positions;
     //   console.log(positions);
+    const handleInfoWindowClick = () => {
+        // window.location.href = 'https://www.example.com'; // ここに遷移先のURLを設定
+        alert("タッチした");
+      };
   return (
     <>
     <LoadScript
         googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY!}>
+      <div>
+    {Object.keys(genreToColor).map(color => (
+        <button key={color} 
+                style={{ 
+                    background: selectedType === color ? genreToColor[color] : '#BFC5CA', // 選択されたボタンだけ背景色を設定
+                    color: selectedType === color ? '#FFFFFF' : genreToColor[color], // 他のボタンはジャンルの色を文字色にする
+                    border: `1px solid ${genreToColor[color]}`, // 枠線もジャンルの色に合わせる
+                    padding: '10px 20px',
+                    borderRadius: '5px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                    transition: 'background-color 0.3s, color 0.3s'
+                }}
+                className='selectButton'
+                onClick={() => {setSelectedType(color); SetSelectPosition(null);}}>
+            {color.toUpperCase()}
+        </button>
+    ))}
+    <button onClick={() => {setSelectedType(null); SetSelectPosition(null)}}
+            style={{ 
+                background: selectedType === null ? 'gray' : '#FFFFFF', // "SHOW ALL"が選択されている場合に背景色を設定
+                color: selectedType === null ? '#FFFFFF' : 'gray', // 未選択時は灰色の文字色
+                border: '1px solid gray', // 枠線は灰色
+                padding: '10px 20px',
+                borderRadius: '5px',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                transition: 'background-color 0.3s, color 0.3s'
+            }}
+            >SHOW ALL
+    </button>
+</div>
+
+    <div className='mapandDetail'>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
         zoom={16}
         options={mapOptions}
       >
-      {positions.map((position, index) => (
+      {filterMarkers.map((position, index) => (
         <MarkerF key={position.id}
          position={position} 
          onClick={()=> SelectedPosition(position)}
@@ -160,7 +226,7 @@ const createSvgIcon = (color: string): string => {
                 
             >
                 
-                <div>
+                <div onClick={handleInfoWindowClick}>
                     {selectPosition.name}
                     <br/>
                     {selectPosition.price}円
@@ -169,6 +235,10 @@ const createSvgIcon = (color: string): string => {
         )}
         {/* ここにマップ上に配置する他の要素を追加できる */}
       </GoogleMap>
+            {/* <img src={selectPosition?.url} /> */}
+            {/* <img src='dog.jpeg' className='storeimg'/> */}
+            <div className='detail'>{selectPosition?.address}</div>
+    </div>
     </LoadScript>
     </>
   );
