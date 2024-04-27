@@ -13,5 +13,36 @@
 
 .detail {
     flex: 1;               /* フレックスアイテムの拡大縮小に応じて調整 */
-    min-width: 300px;      /* 最小の幅 */
-}
+    min-width: 300px;
+    animation: fadeInAnimation ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;     /* 最小の幅 */
+} 
+  @keyframes fadeInAnimation {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  .addpagebutton {
+    padding: 10px 20px;
+    background-color: #C0C0C0;  /* ブルー */
+    color: rgb(12, 12, 12);
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    font-size: 25px;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .addpagebutton:hover, .addpagebutton:focus {
+    background-color: #0056b3;  /* 濃いブルー */
+    transform: scale(1.05);
+  }
+  
+  .addpagebutton:active {
+    background-color: #004085;  /* さらに濃いブルー */
+    transform: scale(0.95);
+  }
+  

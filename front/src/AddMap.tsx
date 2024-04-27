@@ -69,18 +69,75 @@ export const AddMap = () => {
         body: JSON.stringify(dataToSubmit),
       });
       const result = await response.json();
-      alert('送信成功: ' + JSON.stringify(result));
+      alert('送信成功しました');
       navigate('/');
     } catch (error) {
       console.error('Error:', error);
       alert('送信失敗');
     }
   };
+  const [address, setAddress] = useState<string>('');
+
+  const getLocation = (): void => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+      setAddress("Geolocation is not supported by this browser.");
+    }
+  };
+
+  const showPosition = (position: GeolocationPosition): void => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+  
+    const geocoder = new google.maps.Geocoder();
+    const latlng = new google.maps.LatLng(lat, lng);
+    geocoder.geocode({ 'location': latlng }, (results, status) => {
+      if (status === google.maps.GeocoderStatus.OK) {
+        if (results && results[0]) {
+          const formattedAddress = formatAddress(results[0].formatted_address);
+          setFormData(prev => ({ ...prev, address: formattedAddress }));
+        } else {
+          setAddress("No results found");
+        }
+      } else {
+        setAddress("Geocoder failed due to: " + status);
+      }
+    });
+  };
+  
+
+  const showError = (error: GeolocationPositionError): void => {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          setAddress("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          setAddress("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          setAddress("The request to get user location timed out.");
+          break;
+        default:
+          setAddress("An unknown error occurred.");
+          break;
+      }
+    };
+    function formatAddress(address: string): string {
+        // 国名を削除（ここでは '日本、' を削除）
+        let formatted = address.replace('日本、', '');
+      
+        // 郵便番号を削除（正規表現を使用して '〒' に続く数字を削除）
+        formatted = formatted.replace(/〒\d{3}-\d{4}\s*/, '');
+      
+        return formatted;
+      }
 
   return (
     <>
     <Link to="/" className='home'>HOME</Link>
     <form onSubmit={handleSubmit} className='add_form'>
+    <p className='title'>お店を追加する</p>
       <input
         type="text"
         name="name"
@@ -90,6 +147,7 @@ export const AddMap = () => {
         required
         placeholder="店名"
         />
+    <button onClick={getLocation}>現在地を取得する</button>
       <input
         type="text"
         name="address"

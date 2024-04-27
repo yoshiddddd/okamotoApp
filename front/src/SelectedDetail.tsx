@@ -1,10 +1,12 @@
-import React from 'react';
+import React ,{ useState }from 'react';
+import gazou from './guranarda.jpeg'
+import "./SelectedDetail.css"
 interface LatLngAddress {
     id: number;
     lat: number;
     lng: number;
     infomation: string;
-    // name: string;
+    name: string;
    
   }
 interface SelectedDetailProps {
@@ -12,12 +14,19 @@ interface SelectedDetailProps {
 }
 
 const SelectedDetail: React.FC<SelectedDetailProps> = ({ position }) => {
+
+
+
   return (
-    <div>
-      <h2>{position.infomation}</h2>
-      <p>ID: {position.id}</p>
+    <>
+
+    <div className='fade-in'>
+      <h2 className='name'>NAME : {position.name}</h2>
+      <p className='info'>INFO : {position.infomation}</p>
+      <img src={gazou } className='image'></img>
       {/* 他の詳細情報を表示するコードを追加 */}
     </div>
+    </>
   );
 };
 

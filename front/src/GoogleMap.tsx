@@ -10,7 +10,7 @@ import "./GoogleMap.css";
 const containerStyle = {
     width: '900px',        // コンテナの幅を設定
     height: '700px',       // コンテナの高さを設定
-    border: '2px solid #0080ff', // 枠線を青で設定
+    border: '4px solid #C0C0C0', // 枠線を青で設定
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // 影を付ける
     borderRadius: '10px',  // 角の丸みを設定
     overflow: 'hidden'
@@ -21,16 +21,12 @@ const center = {
     lat: 35.6905,
     lng: 139.6995
 };
-// const position = {
-//     lat:  35.6995,
-//     lng: 139.644
-//   };
 interface LatLngAddress {
     id: number;
     lat: number;
     lng: number;
     infomation: string;
-    // name: string;
+    name: string;
    
   }
 const mapOptions = {
@@ -77,11 +73,12 @@ const mapOptions = {
     id: number;
     lat: number;
     lng: number;
-    // name: string;
+    name: string;
     // price: number;
   }
   interface Form{
 	id: number;
+    name: string;
     address: string;
 	category: string;
     created_at:string;
@@ -109,9 +106,7 @@ export const MyGoogleMap = () => {
           setTimeout(checkScriptLoaded, 200);
         }
       };
-  
       checkScriptLoaded();
-  
       return () => {
         isSubscribed = false;
       };
@@ -145,7 +140,8 @@ export const MyGoogleMap = () => {
                         id: item.id,
                         lat: latLng.lat,
                         lng: latLng.lng,
-                        infomation: item.information
+                        infomation: item.information,
+                        name: item.name
                     };
                 });
                 const newPositions = await Promise.all(promises);
@@ -189,9 +185,7 @@ export const MyGoogleMap = () => {
     <>
     <LoadScript
         googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY!}>
-    <Link to="/addmap"> 投稿</Link>
-    <br/>
-    <Link to="/deletemap">削除</Link>
+    <Link to="/addmap" className='addpagebutton'> 投稿</Link>
 
     <div className='mapandDetail'>
      {isScriptLoaded&&( <GoogleMap
@@ -212,7 +206,7 @@ export const MyGoogleMap = () => {
 
             >
                 <div>
-                    {selectPosition.infomation}
+                    {selectPosition.name}
                     <br/>
                     ID: {selectPosition.id}
                 </div>
@@ -235,7 +229,7 @@ export const MyGoogleMap = () => {
             )}
       </GoogleMap>)}
       <div className='detail'>
-      {selectPosition && <SelectedDetail position={selectPosition} />}
+      {selectPosition && <SelectedDetail key={selectPosition.id} position={selectPosition} />}
       </div>
       <div>
         {

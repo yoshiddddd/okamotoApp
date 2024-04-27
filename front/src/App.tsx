@@ -3,9 +3,10 @@ import {Routes , Route} from "react-router-dom";
 import MyGoogleMap from './GoogleMap';
 import {AddMap} from './AddMap';
 import { DeleteMap } from './DeleteMap';
+import "./App.css"
 function App() {
   return (
-    <>
+    <body>
     <h1>OKAMOTO APP</h1>
       <Routes>
         <Route path="/" element={<MyGoogleMap />} /> 
@@ -13,7 +14,7 @@ function App() {
         <Route path="/deletemap" element={<DeleteMap />} /> 
         {/* <Route path="/login" element={<Login />} /> */}
       </Routes>
-    </>
+    </body>
   );
 }
 
