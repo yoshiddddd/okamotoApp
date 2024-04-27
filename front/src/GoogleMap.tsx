@@ -73,13 +73,38 @@ const mapOptions = {
     // name: string;
     // price: number;
   }
-  
+  interface Form{
+	ID: number;
+	Name: string;
+	PhoneNumber: string;
+	Address: string;
+	CreateAt: string;
+	UpdateAt: string
+  }
 
 const MyGoogleMap = () => {
     const [positions, setPositions] = useState<LatLngAddress[]>([]);
     const [selectPosition , SetSelectPosition] = useState<LatLngAddress | null>(null);
-    useEffect(() => {
+	// const [form,setForm] = useState<Form[]>([]);
+	// useEffect(() => {
+		// const fetchData = async () => {
+		// 	try {
+		// 		const response = await fetch('http://localhost:8080/stores');
+		// 		if (!response.ok) {
+		// 		  throw new Error('Network response was not ok');
+		// 		}
+		// 		const data = await response.json();
+		// 		setForm(data); // Assuming the data is in the format expected for 'form'
+		// 	  } catch (error) {
+		// 		console.error('There was a problem with the fetch operation:', error);
+		// 	  }
+			  
+		// };
+	// 	fetchData();
+	//   }, []);
+	  useEffect(()=>{
         const fetchPositions = async () => {
+
           const promises = detailedAddresses.map(async (item): Promise<LatLngAddress> => {
             const latLng = await getLatLng(item.address);
             return {
@@ -93,7 +118,6 @@ const MyGoogleMap = () => {
           const newPositions = await Promise.all(promises);
           setPositions(newPositions);
         };
-    
         fetchPositions();
       }, []);
 
