@@ -31,6 +31,7 @@ func (sc *storeController) List(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
+	fmt.Print(storesResponse)
 	return c.JSON(http.StatusOK, storesResponse)
 }
 

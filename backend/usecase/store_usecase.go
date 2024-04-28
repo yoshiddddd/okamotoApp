@@ -38,6 +38,8 @@ func (su *StoreUsecase) List() ([]model.Store, error) {
 			Name: v.Name,
 			Address : v.Address,
 			Information: v.Information,
+			Category: v.Category,
+			Payment : v.Payment,
 			CreatedAt: v.CreatedAt,
 			UpdatedAt: v.UpdatedAt,
 		}
