@@ -1,0 +1,182 @@
+[
+    {
+        "id": 1,
+        "name": "和食・そば いちぞう 十二社店",
+        "address": "東京都新宿区西新宿4丁目14-2",
+        "information": "そばなど、地元な雰囲気が魅力的。天ぷらが一押し！",
+        "category": "restran",
+        "payment": "cash",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    },
+    {
+        "id": 2,
+        "name": "イル・ソーレガット",
+        "address": "東京都新宿区西新宿４丁目１６−６",
+        "information": "イタリア料理店・綺麗め",
+        "category": "restran",
+        "payment": "paypay",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    },
+    {
+        "id": 3,
+        "name": "プスパ西新宿店",
+        "address": "東京都新宿区西新宿４丁目１２−１６",
+        "information": "インド料理店。店員さん優しいよ",
+        "category": "restran",
+        "payment": "cash",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    },
+    {
+        "id": 4,
+        "name": "The MEALS アジアンダイニング ザ ミールス 西新宿店",
+        "address": "東京都新宿区西新宿６丁目１６−９",
+        "information": "とにかく安い。個人的なおすすめはセット",
+        "category": "restran",
+        "payment": "",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    },
+    {
+        "id": 5,
+        "name": "ファンゴーダイニング",
+        "address": "東京都新宿区西新宿６丁目１６−７",
+        "information": "窓からは、新宿中央公園の緑や高層ビル群が見える。料理はフレンチやイタリアンがメインで、料理に合うワインを多数取り揃えている。",
+        "category": "restran",
+        "payment": "",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    },
+    {
+        "id": 6,
+        "name": "たくあん・牡丹亭",
+        "address": "東京都新宿区西新宿４丁目１５−１",
+        "information": "ハンバーグなど色々と美味しい",
+        "category": "restran",
+        "payment": "",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    },
+    {
+        "id": 7,
+        "name": "マルエツ プチ 西新宿六丁目店",
+        "address": "東京都新宿区西新宿６丁目１５−１",
+        "information": "割と安いスーパー",
+        "category": "market",
+        "payment": "",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    },
+    {
+        "id": 8,
+        "name": "スーパーマーケットリコス 渋谷本町３丁目店",
+        "address": "東京都渋谷区本町３丁目５２−６",
+        "information": "yosidakazushi",
+        "category": "market",
+        "payment": "cash",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    },
+    {
+        "id": 9,
+        "name": "熊野神社",
+        "address": "東京都新宿区西新宿２丁目１１−２",
+        "information": "ここ行ったら運気上がった！",
+        "category": "untiku",
+        "payment": "",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    },
+    {
+        "id": 10,
+        "name": "新宿中央公園",
+        "address": "東京都新宿区西新宿２丁目１１",
+        "information": "芝生あって人も少ない",
+        "category": "untiku",
+        "payment": "",
+        "created_at": "2024-04-01T09:00:00+09:00",
+        "updated_at": "2024-04-01T09:00:00+09:00",
+        "user": {
+            "id": 0,
+            "email": "",
+            "password": "",
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "user_id": 0
+    }
+]

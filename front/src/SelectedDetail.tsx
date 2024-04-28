@@ -1,5 +1,5 @@
 import React ,{ useState }from 'react';
-import gazou from './guranarda.jpeg'
+import gazou from './soba.jpeg'
 import "./SelectedDetail.css"
 import "./DeleteMap"
 interface LatLngAddress {
@@ -8,6 +8,7 @@ interface LatLngAddress {
     lng: number;
     infomation: string;
     name: string;
+    payment: string;
    
   }
 interface SelectedDetailProps {
@@ -43,10 +44,11 @@ const SelectedDetail: React.FC<SelectedDetailProps> = ({ position, onDelete }) =
     <>
 
     <div className='fade-in'>
-      <h2 className='name'> NAME : {position.name}</h2>
+      <h2 className='name'> {position.name}</h2>
       <p className='info'>INFO : {position.infomation}</p>
+      <p className='pay'>支払い方法 : {position.payment}</p>
       <img src={gazou } className='image'></img>
-      <button onClick={handleDelete}>Delete</button>
+      <button onClick={handleDelete} className='deletebtn'>Delete</button>
       {/* 他の詳細情報を表示するコードを追加 */}
     </div>
     </>

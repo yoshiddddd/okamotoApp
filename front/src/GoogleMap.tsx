@@ -1,19 +1,21 @@
 
 
-// import React from 'react';
-import { useState ,useEffect,useCallback} from 'react';
-import { GoogleMap, InfoWindowF, LoadScript,MarkerF } from '@react-google-maps/api';
-import { Skeleton } from '@chakra-ui/react';
-import { useNavigate,Link } from 'react-router-dom';  
+import { useState ,useEffect} from 'react';
+import { GoogleMap, InfoWindowF,MarkerF } from '@react-google-maps/api';
+import { Link } from 'react-router-dom';  
 import  SelectedDetail  from './SelectedDetail';
+import data from './data.json'
 import "./GoogleMap.css";
+
 const containerStyle = {
-    width: '900px',        // コンテナの幅を設定
-    height: '900px',       // コンテナの高さを設定
-    border: '4px solid #C0C0C0', // 枠線を青で設定
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // 影を付ける
-    borderRadius: '10px',  // 角の丸みを設定
-    overflow: 'hidden'
+    width: '900px',        
+    height: '700px',       
+    border: '4px solid #C0C0C0', 
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+    borderRadius: '10px',  
+    overflow: 'hidden',
+    margin: '15px',
+    
     
 };
 
@@ -21,76 +23,48 @@ const center = {
     lat: 35.6907,
     lng: 139.695
 };
-interface LatLngAddress {
-    id: number;
-    lat: number;
-    lng: number;
-    infomation: string;
-    name: string;
-   
-  }
 const mapOptions = {
     styles: [
-      {
-        featureType: "all",
-        elementType: "labels",
-        stylers: [{ visibility: "off" }]
-      },
-      {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [{ visibility: "simplified" }]
-      },
-      // 他のスタイル設定...
+        {
+            featureType: "all",
+            elementType: "labels",
+            stylers: [{ visibility: "off" }]
+        },
+        {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{ visibility: "simplified" }]
+        },
     ]
-  };
-  const getLatLng = async (address: string): Promise<google.maps.LatLngLiteral> => {
+};
+const getLatLng = async (address: string): Promise<google.maps.LatLngLiteral> => {
     const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyBYvFpfWrAo1nt1h-Ojt7Tl06hnteXAgPk`);
     const data = await response.json();
     return data.results[0].geometry.location;
-  }
-  const detailedAddresses = [
-    {
-      id: 1,
-      address: "東京都新宿区西新宿2-8-1",
-      name: "イタリアン",
-      price: 10000
-    },
-    {
-      id: 2,
-      address: "東京都千代田区千代田1-1",
-      name: "居酒屋",
-      price: 100
-    },
-    {
-      id: 3,
-      address: "東京都港区芝公園4-2-8",
-      name: "中華",
-      price: 1000
-    }
-  ];
-  interface Position {
+}
+interface Form{
     id: number;
-    lat: number;
-    lng: number;
-    name: string;
-    // price: number;
-  }
-  interface Form{
-	id: number;
     name: string;
     address: string;
 	category: string;
     created_at:string;
 	PhoneNumber: string;
     information:string;
-  }
+}
+interface LatLngAddress {
+    id: number;
+    lat: number;
+    lng: number;
+    infomation: string;
+    name: string;
+    category: string;
+    payment: string;
+}
 
 export const MyGoogleMap = () => {
     const [positions, setPositions] = useState<LatLngAddress[]>([]);
     const [selectPosition , SetSelectPosition] = useState<LatLngAddress | null>(null);
 	const [form,setForm] = useState<Form[]>([]);
-    const navigate = useNavigate();
     const [currentPosition, setCurrentPosition] = useState<google.maps.LatLngLiteral | null>(null);
     const [watchId, setWatchId] = useState<number | null>(null);
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
@@ -135,7 +109,7 @@ export const MyGoogleMap = () => {
     useEffect(() => {
         if (form.length > 0) { // formが空ではないことを確認
             const fetchPositions = async () => {
-                const promises = form.map(async (item) => {
+                const promises = data.map(async (item) => {
                     const latLng = await getLatLng(item.address);
                     console.log(latLng);
                     return {
@@ -143,7 +117,9 @@ export const MyGoogleMap = () => {
                         lat: latLng.lat,
                         lng: latLng.lng,
                         infomation: item.information,
-                        name: item.name
+                        name: item.name,
+                        category: item.category,
+                        payment: item.payment
                     };
                 });
                 const newPositions = await Promise.all(promises);
@@ -181,13 +157,33 @@ export const MyGoogleMap = () => {
           console.log(selectPosition);
       }
     //   console.log(positions);
-  
+    const iconUrl = (category: string): string => {
+        switch (category) {
+          case 'restran':
+            return 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+          case 'market':
+            return 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+          case 'untiku':
+            return 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
+          default:
+            return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';  // デフォルトの色
+        }
+      };
+      const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+      const filteredPositions = positions.filter(position => {
+        return selectedCategory ? position.category === selectedCategory : true;
+      });
   return (
     //各種りんく
     <>
-    
-    <Link to="/addmap" className='addpagebutton'> 投稿</Link>
+    <div className='button'>
+    <button onClick={() => setSelectedCategory('restran')} className='blue-pin'>レストラン</button>
+      <button onClick={() => setSelectedCategory('market')} className='green-pin'>スーパー</button>
+      <button onClick={() => setSelectedCategory('untiku')} className='yellow-pin'>雑談</button>
+      <button onClick={() => setSelectedCategory(null)} className='all-pin'>すべて表示</button>
 
+    <Link to="/addmap" className='addpagebutton'> 投稿</Link>
+    </div>
     <div className='mapandDetail'>
      {isScriptLoaded&&( <GoogleMap
         mapContainerStyle={containerStyle}
@@ -196,8 +192,12 @@ export const MyGoogleMap = () => {
         options={mapOptions}
       >
       {
-      positions.map((position, index) => (
-        <MarkerF key={position.id} position={position} onClick={()=> SelectedPosition(position)} />
+      filteredPositions.map((position, index) => (
+        <MarkerF key={position.id} position={position} onClick={()=> SelectedPosition(position)}
+        icon={{
+            url: iconUrl(position.category),  // アイコンURLを設定
+          }}
+        />
         ))
         }
         {selectPosition&&(
@@ -208,13 +208,11 @@ export const MyGoogleMap = () => {
             >
                 <div>
                     {selectPosition.name}
-                    <br/>
-                    ID: {selectPosition.id}
                 </div>
         </InfoWindowF>
          )} 
 
-{currentPosition && (
+{/* {currentPosition && (
               <MarkerF
                 position={currentPosition}
                 icon={{
@@ -227,7 +225,7 @@ export const MyGoogleMap = () => {
                   }}
                 title="現在地"
               />
-            )}
+            )} */}
       </GoogleMap>)}
       <div className='detail'>
       {selectPosition && <SelectedDetail key={selectPosition.id} position={selectPosition} onDelete={reloadPage} />}

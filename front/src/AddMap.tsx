@@ -137,7 +137,7 @@ export const AddMap = () => {
     <>
     <Link to="/" className='home'>HOME</Link>
     <form onSubmit={handleSubmit} className='add_form'>
-    <p className='title'>お店を追加する</p>
+    <p className='title'>ピンを追加する</p>
       <input
         type="text"
         name="name"
@@ -147,7 +147,7 @@ export const AddMap = () => {
         required
         placeholder="店名"
         />
-    <button onClick={getLocation}>現在地を取得する</button>
+    <button onClick={getLocation} className='getposition'>現在地を取得する</button>
       <input
         type="text"
         name="address"

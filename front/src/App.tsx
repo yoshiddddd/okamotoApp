@@ -8,7 +8,7 @@ import "./App.css"
 function App() {
   return (
     <body>
-    <h1>OKAMOTO APP</h1>
+    <h1>見つけろ！！地域の魅力！</h1>
     <LoadScript
         googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY!}>
       <Routes>

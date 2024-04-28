@@ -45,4 +45,67 @@
     background-color: #004085;  /* さらに濃いブルー */
     transform: scale(0.95);
   }
+  /* 共通のボタンスタイル */
+  .button {
+    display: flex; /* Flexboxを有効化 */
+    align-items: center; /* ボタンを垂直方向中央に配置 */
+    justify-content: start; /* 左から配置を始める */
+    margin-right: 20px; /* 右の要素との間に20pxのスペースを設定 */
+  }
+  .addpagebutton {
+    display: inline-block; /* インラインブロック要素として表示 */
+    padding: 10px 20px; /* パディングを設定 */
+    margin: 0px 0px 0px 300px;
+    color: white; /* テキスト色を白に設定 */
+    background-color: red; 
+    text-decoration: none; /* 下線を消去 */
+    border-radius: 25px; /* 角を丸くする */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 影を追加 */
+  }
+button {
+    padding: 12px 24px;
+    color: white;
+    border: none;
+    border-radius: 25px; /* 増加した丸み */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* ソフトな影を追加 */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
   
+  
+  /* カテゴリー別の色設定 */
+  .blue-pin {
+      background-color: #007BFF; /* ブルー */
+    }
+    
+    .green-pin {
+        background-color: #28a745; /* グリーン */
+    }
+    
+    .yellow-pin {
+        background-color: #ffc107; /* イエロー */
+    }
+    
+    .all-pin {
+        background-color: #6c757d; /* グレー */
+    }
+    
+    .blue-pin:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .green-pin:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .yellow-pin:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .all-pin:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
