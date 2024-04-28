@@ -2,7 +2,6 @@ import React from 'react';
 import {Routes , Route} from "react-router-dom";
 import MyGoogleMap from './GoogleMap';
 import {AddMap} from './AddMap';
-import { DeleteMap } from './DeleteMap';
 import { GoogleMap, InfoWindowF, LoadScript,MarkerF } from '@react-google-maps/api';
 import "./App.css"
 function App() {
